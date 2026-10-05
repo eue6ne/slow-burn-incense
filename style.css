@@ -1,0 +1,540 @@
+:root {
+  --bg: #0b171e;
+  --text: #d8e0dd;
+  --text-soft: #8fa5aa;
+  --line: #5f7d86;
+  --select: #3f5f69;
+  --accent: #a8503a;
+  --accent-hover: #bd664d;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  background: var(--bg);
+  color: var(--text);
+  font-family: sans-serif;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* 배경 그림과 같은 비율(16:10)의 상자. 모든 요소는 이 안에서 배치돼요 */
+.stage {
+  position: relative;
+  width: min(100vw, 160vh);
+  aspect-ratio: 16 / 10;
+  background: url("images/background.jpg") center / 100% 100% no-repeat;
+  container-type: inline-size;
+}
+
+.title {
+  position: absolute;
+  top: 5%;
+  left: 0;
+  right: 0;
+  margin: 0;
+  text-align: center;
+  font-size: clamp(22px, 3cqw, 48px);
+  font-weight: 600;
+}
+
+/* 선택창 */
+.panel {
+  position: absolute;
+  text-align: center;
+  transition: opacity 0.6s;
+}
+
+.materials {
+  top: 12%;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.ignitions {
+  top: 71%;
+  left: 62%;
+}
+
+.ignitions .row {
+  flex-direction: column;
+}
+
+.label {
+  margin: 0 0 8px;
+  font-size: clamp(11px, 1cqw, 16px);
+  letter-spacing: 0.05em;
+  color: var(--text-soft);
+}
+
+.row {
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+}
+
+.choice {
+  padding: 0.4em 1.2em;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: rgba(11, 23, 30, 0.45);
+  color: var(--text);
+  font-size: clamp(12px, 1.1cqw, 18px);
+  cursor: pointer;
+}
+
+.choice:hover {
+  border-color: var(--text);
+}
+
+.choice.selected {
+  background: var(--select);
+  border-color: var(--select);
+  color: #eef3f0;
+}
+
+/* 시작 화면이 아니면 선택창이 사라져요 */
+.stage:not([data-state="idle"]) .panel {
+  opacity: 0;
+  pointer-events: none;
+}
+
+/* 향과 거치대 (아래 숫자로 위치를 조정해요) */
+.item {
+  display: none;
+  position: absolute;
+  left: 50%;
+  bottom: 21%;
+}
+
+.item.active {
+  display: block;
+}
+
+/* 스틱: 우상단 대각선 + 거치대 */
+.stick {
+  --color: #8b5a2b;
+  position: absolute;
+  left: -0.2cqw;
+  bottom: 1cqw;
+  width: 0.4cqw;
+  height: 20cqw;
+  transform-origin: bottom center;
+  transform: rotate(0deg);
+}
+
+.holder {
+  position: absolute;
+  left: -3.5cqw;
+  bottom: -2cqw;
+  width: 7cqw;
+  height: 4cqw;
+  background: #c8cdc6;
+  border-radius: 50% 50% 0 0 / 100% 100% 0 0;
+}
+
+/* 우드: X자. 아래 숫자로 X의 위치와 받침우드 길이를 바꿔요 */
+#item-wood {
+  --cross-x: 2cqw;
+  --cross-y: -1cqw;
+  --under-length: 12cqw;
+}
+
+.wood {
+  position: absolute;
+  left: calc(var(--cross-x) - 0.5cqw);
+  width: 2cqw;
+  height: 14cqw;
+  background: #6b4a2f;
+  border-radius: 0.5cqw;
+}
+
+/* 받침 우드: 오른쪽 끝에서 25% 지점이 교차점이에요 */
+.wood-under {
+  height: var(--under-length);
+  top: calc(var(--cross-y) - var(--under-length) * 0.75);
+  transform-origin: 30% 80%;
+  transform: rotate(-70deg);
+}
+
+/* 타는 우드: 불 붙는 끝이 우상단, 그 끝에서 35% 지점이 교차점이에요 */
+.wood-top {
+  --color: #7a5736;
+  top: calc(var(--cross-y) - 6.5cqw);
+  transform-origin: 55% 30%;
+  transform: rotate(50deg);
+  background: none;
+}
+
+/* 페이퍼: 집게가 아랫부분을 집고 있어요 */
+.paper {
+  --color: #e6dcc8;
+  position: absolute;
+  left: -2.0cqw;
+  bottom: 1cqw;
+  width: 1.6cqw;
+  height: 16cqw;
+  transform-origin: bottom center;
+  transform: rotate(30deg);
+}
+
+.tongs {
+  position: absolute;
+  left: -0.8cqw;
+  bottom: 0;
+  width: 3.0cqw;
+  height: 7cqw;
+  background: #4b5258;
+  border-radius: 0.6cqw;
+  transform-origin: bottom center;
+  transform: rotate(-90deg);
+}
+
+/* 향 조각: 원본(위)과 그을린 층(아래)을 겹쳐요. 이미지는 여기 background만 바꿔요 */
+.piece {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  border-radius: inherit;
+  background: var(--color);
+}
+
+.piece-fresh {
+  clip-path: inset(0% 0% 0% 0%);
+}
+
+.piece-char {
+  clip-path: inset(0% 0% 100% 0%);
+  filter: brightness(0.35);
+}
+
+/* 타기 시작하면(lit) 원본은 위에서부터 잘리고, 그을린 층과 불씨가 같이 내려가요 */
+.lit .piece-fresh {
+  clip-path: inset(var(--burn) 0% 0% 0%);
+  transition: clip-path var(--time) linear;
+}
+
+.lit .piece-char {
+  clip-path: inset(var(--ash-cut) 0% calc(100% - var(--burn)) 0%);
+  transition: clip-path var(--time) linear;
+}
+
+.burn-line {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 0;
+}
+
+.lit .burn-line {
+  top: var(--burn);
+  transition: top var(--time) linear;
+}
+
+/* 불씨와 그을림: 타는 동안에만 보여요 */
+.ember {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  width: 0.8cqw;
+  height: 0.8cqw;
+  margin: -0.4cqw 0 0 -0.4cqw;
+  border-radius: 50%;
+  background: #ff7a2b;
+  box-shadow: 0 0 1cqw 0.4cqw rgba(255, 122, 43, 0.6);
+  opacity: 0;
+  transition: opacity 1s;
+}
+
+.scorch {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 3cqw;
+  background: linear-gradient(to bottom, rgba(25, 12, 6, 0.85), rgba(25, 12, 6, 0));
+  opacity: 0;
+  transition: opacity 1s;
+}
+
+.stage[data-state="burning"] .ember,
+.stage[data-state="burning"] .scorch {
+  opacity: 1;
+}
+
+/* 연기: JS가 불씨 위치에 만들어 주고, 올라가면서 퍼지다가 사라져요 */
+.puff {
+  position: absolute;
+  width: 2cqw;
+  height: 2cqw;
+  margin: -1cqw 0 0 -1cqw;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(225, 230, 235, 0.4), rgba(225, 230, 235, 0) 70%);
+  filter: blur(0.3cqw);
+  pointer-events: none;
+  animation: rise 6s ease-out forwards;
+}
+
+.puff.big {
+  width: 3cqw;
+  height: 3cqw;
+  margin: -1.5cqw 0 0 -1.5cqw;
+}
+
+@keyframes rise {
+  0% {
+    transform: translate(0, 0) scale(0.6);
+    opacity: 0;
+  }
+  15% {
+    opacity: 1;
+  }
+  100% {
+    transform: translate(var(--drift), -20cqw) scale(4);
+    opacity: 0;
+  }
+}
+
+/* 타이머와 버튼 */
+.controls {
+  position: absolute;
+  left: 50%;
+  bottom: 5%;
+  transform: translateX(-50%);
+  text-align: center;
+}
+
+.timer-row {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 4px;
+}
+
+#timer {
+  margin: 0;
+  min-width: 4.5em;
+  font-size: clamp(18px, 2.2cqw, 34px);
+}
+
+.step {
+  visibility: hidden;
+  width: 2em;
+  height: 2em;
+  border: 1px solid var(--line);
+  border-radius: 50%;
+  background: transparent;
+  color: var(--text);
+  font-size: clamp(12px, 1.1cqw, 18px);
+  cursor: pointer;
+}
+
+.step:hover {
+  border-color: var(--text);
+}
+
+.action {
+  display: none;
+  padding: 0.5em 1.7em;
+  border: none;
+  border-radius: 999px;
+  background: var(--accent);
+  color: #f3ece6;
+  font-size: clamp(13px, 1.2cqw, 19px);
+  cursor: pointer;
+}
+
+.action:hover {
+  background: var(--accent-hover);
+}
+
+#stop,
+#again {
+  border: 1px solid var(--line);
+  background: transparent;
+}
+
+/* 상태에 따라 보이는 버튼이 달라져요 */
+.stage[data-state="idle"] .step {
+  visibility: visible;
+}
+
+.stage[data-state="idle"] #start,
+.stage[data-state="igniting"] #stop,
+.stage[data-state="burning"] #stop,
+.stage[data-state="done"] #again {
+  display: inline-block;
+}
+/* 점화 도구: 선택 버튼 자리에서 나와 향 끝으로 가요 */
+#tool,
+#box {
+  position: absolute;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.4s;
+}
+
+#tool {
+  --amp: 1;
+  --move: 1s;
+  left: 0;
+  top: 0;
+  width: 0;
+  height: 0;
+  transition: opacity 0.4s, left var(--move) ease-in-out, top var(--move) ease-in-out;
+}
+
+#tool.show,
+#box.show {
+  opacity: 1;
+}
+
+#tool.moving {
+  --amp: 2.5;
+}
+
+#tool[data-type="match"] .lighter,
+#tool[data-type="lighter"] .match-parts {
+  display: none;
+}
+
+/* 라이터 */
+.lighter {
+  position: absolute;
+  left: -1.2cqw;
+  top: 1.2cqw;
+  width: 2.4cqw;
+  height: 6cqw;
+  border-radius: 0.5cqw;
+  background: linear-gradient(#aab2b6 12%, #6f787d);
+}
+
+/* 성냥 (burnt가 붙으면 까맣게 타요) */
+.match-stick {
+  position: absolute;
+  left: -0.25cqw;
+  top: 1.4cqw;
+  width: 0.5cqw;
+  height: 7cqw;
+  background: #d8b57a;
+}
+
+.match-head {
+  position: absolute;
+  left: -0.5cqw;
+  top: 0.6cqw;
+  width: 1cqw;
+  height: 1.3cqw;
+  border-radius: 50%;
+  background: #b3392b;
+}
+
+#tool.burnt .match-head {
+  background: #111;
+}
+
+#tool.burnt .match-stick {
+  background: linear-gradient(#1a1410 45%, #d8b57a 45%);
+}
+
+/* 성냥통과 긋는 면 */
+#box {
+  left: 60%;
+  top: 75%;
+  width: 10cqw;
+  height: 6cqw;
+}
+
+.box-body {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 7cqw;
+  height: 6cqw;
+  border-radius: 0.4cqw 0 0 0.4cqw;
+  background: #8a2f26;
+}
+
+.strip {
+  position: absolute;
+  left: 7cqw;
+  top: 0;
+  width: 3cqw;
+  height: 6cqw;
+  border-radius: 0 0.4cqw 0.4cqw 0;
+  background: #3a3a3d;
+}
+
+/* 지나간 자리가 살짝 하얘져요 */
+.scratch {
+  position: absolute;
+  left: 0.5cqw;
+  top: 0.5cqw;
+  width: 0.25cqw;
+  height: 5.4cqw;
+  background: rgba(255, 255, 255, 0.3);
+  transform-origin: top left;
+  transform: rotate(-22deg) scaleY(0);
+}
+
+#box.struck .scratch {
+  transform: rotate(-22deg) scaleY(1);
+  transition: transform 0.25s linear;
+}
+
+/* 불꽃: --amp가 클수록 크게 일렁여요 */
+.flame {
+  position: absolute;
+  left: -0.8cqw;
+  top: -1.6cqw;
+  width: 1.6cqw;
+  height: 2.8cqw;
+  border-radius: 50% 50% 50% 50% / 65% 65% 35% 35%;
+  background: radial-gradient(ellipse at 50% 75%, #fff6c9 10%, #ffb23c 45%, #ff6a1a 100%);
+  box-shadow: 0 0 1.2cqw 0.4cqw rgba(255, 140, 50, 0.55);
+  transform-origin: 50% 100%;
+  opacity: 0;
+  transition: opacity 0.2s;
+  animation: flicker 0.18s ease-in-out infinite alternate;
+}
+
+#tool.on .flame {
+  opacity: 1;
+}
+
+@keyframes flicker {
+  from {
+    transform: skewX(calc(var(--amp) * -4deg)) scale(1, 0.92);
+  }
+  to {
+    transform: skewX(calc(var(--amp) * 4deg)) scale(0.92, 1.08);
+  }
+}
+
+/* 스파크: 별(*) 모양으로 사방에 뻗어요 */
+.spark {
+  position: absolute;
+  width: 0.2cqw;
+  height: var(--len);
+  margin: calc(var(--len) * -1) 0 0 -0.1cqw;
+  background: linear-gradient(to top, #fff6c9, rgba(255, 170, 60, 0));
+  transform-origin: 50% 100%;
+  pointer-events: none;
+  animation: spark 0.4s ease-out forwards;
+}
+
+@keyframes spark {
+  from {
+    transform: rotate(var(--a)) translateY(0) scaleY(0.3);
+    opacity: 1;
+  }
+  to {
+    transform: rotate(var(--a)) translateY(-2.5cqw) scaleY(1);
+    opacity: 0;
+  }
+}
