@@ -1,13 +1,11 @@
 const stage = document.getElementById("stage");
 const timerText = document.getElementById("timer");
 
-// 테스트할 때는 20으로 바꿔서 빨리 확인하세요 (버튼을 누르면 1분 단위로 바뀌어요)
 let totalSeconds = 300;
 let timerId = null;
 let startTime = 0;
 let endTime = 0;
 
-// 버튼 그룹에서 하나만 선택되게 하고, 선택된 값을 알려줘요
 function setupGroup(selector, onSelect) {
   const buttons = document.querySelectorAll(selector);
 
@@ -25,7 +23,6 @@ function setupGroup(selector, onSelect) {
   });
 }
 
-// 선택한 재료의 향과 거치대만 보여줘요
 function showItem(name) {
   document.querySelectorAll(".item").forEach(function (item) {
     item.classList.remove("active");
@@ -33,20 +30,17 @@ function showItem(name) {
   document.getElementById("item-" + name).classList.add("active");
 }
 
-// 초를 "05:00" 모양으로 바꿔요
 function formatTime(seconds) {
   const min = String(Math.floor(seconds / 60)).padStart(2, "0");
   const sec = String(seconds % 60).padStart(2, "0");
   return min + ":" + sec;
 }
 
-// 시간 조절: 1분 ~ 60분
 function changeMinutes(delta) {
   totalSeconds = Math.min(3600, Math.max(60, totalSeconds + delta * 60));
   timerText.textContent = formatTime(totalSeconds);
 }
 
-// 연기 조각 하나를 불씨 위치에 만들어요
 function spawnPuff(big) {
   const ember = document.querySelector(".item.active .ember");
   if (!ember || stage.dataset.state === "idle") {
@@ -73,7 +67,6 @@ const tool = document.getElementById("tool");
 const box = document.getElementById("box");
 let runId = 0;
 
-// 기다리는 도중 Stop을 누르면 runId가 바뀌어서 점화가 중단돼요
 async function pause(ms, id) {
   await new Promise(function (resolve) {
     setTimeout(resolve, ms);
@@ -83,7 +76,6 @@ async function pause(ms, id) {
   }
 }
 
-// 요소 안의 한 지점(비율)을 stage 기준 좌표(px)로 바꿔요
 function pointOf(el, fx, fy) {
   const s = stage.getBoundingClientRect();
   const r = el.getBoundingClientRect();
@@ -96,7 +88,6 @@ function moveTool(p, seconds) {
   tool.style.top = p.y + "px";
 }
 
-// 별 모양으로 사방에 뻗는 불꽃 스파크
 function sparkBurst(p) {
   for (let i = 0; i < 8; i++) {
     const spark = document.createElement("div");
@@ -126,13 +117,11 @@ async function ignite(id) {
   box.className = type === "match" ? "show" : "";
   tool.dataset.type = type;
 
-  // 선택 버튼이 있던 자리에서 나타나요
   moveTool(home, 0);
   await pause(60, id);
   tool.classList.add("show");
   await pause(500, id);
 
-  // 성냥: 까슬한 면을 대각선으로 빠르게 긋고, 지나간 자리는 살짝 하얘져요
   if (type === "match") {
     box.classList.add("struck");
     moveTool(pointOf(strip, 0.83, 0.92), 0.25);
@@ -143,7 +132,6 @@ async function ignite(id) {
   tool.classList.add("on");
   await pause(500, id);
 
-  // 불꽃이 일렁이며 향 끝으로 이동해서 3초 동안 불을 붙여요
   tool.classList.add("moving");
   moveTool(tip, 1.4);
   await pause(1400, id);
@@ -152,7 +140,6 @@ async function ignite(id) {
 
   beginBurn();
 
-  // 불을 끄고(성냥은 까맣게 탄 채로) 원래 자리로 돌아간 뒤 사라져요
   tool.classList.remove("on");
   tool.classList.add("burnt");
   await pause(400, id);
@@ -179,14 +166,12 @@ async function startBurning() {
   }
 }
 
-// 점화가 끝나면 향이 타기 시작해요
 function beginBurn() {
   const burnable = document.querySelector(".item.active .burnable");
 
   const burn = parseFloat(burnable.dataset.burn);
   const ash = parseFloat(burnable.dataset.ash);
 
-  // 줄어드는 값은 CSS 변수로 넘기고, lit 클래스를 켜면 애니메이션이 시작돼요
   burnable.style.setProperty("--burn", burn + "%");
   burnable.style.setProperty("--ash-cut", Math.max(0, burn - ash) + "%");
   burnable.style.setProperty("--time", totalSeconds + "s");
@@ -203,7 +188,6 @@ function tick() {
   const remaining = Math.max(0, Math.ceil((endTime - now) / 1000));
   timerText.textContent = formatTime(remaining);
 
-  // 연기: 나왔다가 멈췄다가를 반복해요
   if (Math.sin((now - startTime) / 2000) > 0) {
     spawnPuff(false);
   }
@@ -213,7 +197,6 @@ function tick() {
   }
 }
 
-// 타이머가 끝나면 불이 꺼지고 마지막 연기가 피어올라요 (화면은 그대로 둬요)
 function finishBurning() {
   clearInterval(timerId);
   timerId = null;
@@ -226,7 +209,6 @@ function finishBurning() {
   }
 }
 
-// Stop이나 Again을 누르면 시작 화면으로 돌아가요
 function backToStart() {
   runId++;
   tool.className = "";

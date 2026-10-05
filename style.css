@@ -19,7 +19,6 @@ body {
   align-items: center;
 }
 
-/* 배경 그림과 같은 비율(16:10)의 상자. 모든 요소는 이 안에서 배치돼요 */
 .stage {
   position: relative;
   width: min(100vw, 160vh);
@@ -39,7 +38,6 @@ body {
   font-weight: 600;
 }
 
-/* 선택창 */
 .panel {
   position: absolute;
   text-align: center;
@@ -94,13 +92,11 @@ body {
   color: #eef3f0;
 }
 
-/* 시작 화면이 아니면 선택창이 사라져요 */
 .stage:not([data-state="idle"]) .panel {
   opacity: 0;
   pointer-events: none;
 }
 
-/* 향과 거치대 (아래 숫자로 위치를 조정해요) */
 .item {
   display: none;
   position: absolute;
@@ -112,7 +108,6 @@ body {
   display: block;
 }
 
-/* 스틱: 우상단 대각선 + 거치대 */
 .stick {
   --color: #8b5a2b;
   position: absolute;
@@ -134,7 +129,6 @@ body {
   border-radius: 50% 50% 0 0 / 100% 100% 0 0;
 }
 
-/* 우드: X자. 아래 숫자로 X의 위치와 받침우드 길이를 바꿔요 */
 #item-wood {
   --cross-x: 2cqw;
   --cross-y: -1cqw;
@@ -150,7 +144,6 @@ body {
   border-radius: 0.5cqw;
 }
 
-/* 받침 우드: 오른쪽 끝에서 25% 지점이 교차점이에요 */
 .wood-under {
   height: var(--under-length);
   top: calc(var(--cross-y) - var(--under-length) * 0.75);
@@ -158,7 +151,6 @@ body {
   transform: rotate(-70deg);
 }
 
-/* 타는 우드: 불 붙는 끝이 우상단, 그 끝에서 35% 지점이 교차점이에요 */
 .wood-top {
   --color: #7a5736;
   top: calc(var(--cross-y) - 6.5cqw);
@@ -167,7 +159,6 @@ body {
   background: none;
 }
 
-/* 페이퍼: 집게가 아랫부분을 집고 있어요 */
 .paper {
   --color: #e6dcc8;
   position: absolute;
@@ -191,7 +182,6 @@ body {
   transform: rotate(-90deg);
 }
 
-/* 향 조각: 원본(위)과 그을린 층(아래)을 겹쳐요. 이미지는 여기 background만 바꿔요 */
 .piece {
   position: absolute;
   top: 0;
@@ -211,7 +201,6 @@ body {
   filter: brightness(0.35);
 }
 
-/* 타기 시작하면(lit) 원본은 위에서부터 잘리고, 그을린 층과 불씨가 같이 내려가요 */
 .lit .piece-fresh {
   clip-path: inset(var(--burn) 0% 0% 0%);
   transition: clip-path var(--time) linear;
@@ -235,7 +224,6 @@ body {
   transition: top var(--time) linear;
 }
 
-/* 불씨와 그을림: 타는 동안에만 보여요 */
 .ember {
   position: absolute;
   top: 0;
@@ -266,7 +254,6 @@ body {
   opacity: 1;
 }
 
-/* 연기: JS가 불씨 위치에 만들어 주고, 올라가면서 퍼지다가 사라져요 */
 .puff {
   position: absolute;
   width: 2cqw;
@@ -299,7 +286,6 @@ body {
   }
 }
 
-/* 타이머와 버튼 */
 .controls {
   position: absolute;
   left: 50%;
@@ -359,7 +345,6 @@ body {
   background: transparent;
 }
 
-/* 상태에 따라 보이는 버튼이 달라져요 */
 .stage[data-state="idle"] .step {
   visibility: visible;
 }
@@ -370,7 +355,7 @@ body {
 .stage[data-state="done"] #again {
   display: inline-block;
 }
-/* 점화 도구: 선택 버튼 자리에서 나와 향 끝으로 가요 */
+
 #tool,
 #box {
   position: absolute;
@@ -403,7 +388,6 @@ body {
   display: none;
 }
 
-/* 라이터 */
 .lighter {
   position: absolute;
   left: -1.2cqw;
@@ -414,7 +398,6 @@ body {
   background: linear-gradient(#aab2b6 12%, #6f787d);
 }
 
-/* 성냥 (burnt가 붙으면 까맣게 타요) */
 .match-stick {
   position: absolute;
   left: -0.25cqw;
@@ -442,7 +425,6 @@ body {
   background: linear-gradient(#1a1410 45%, #d8b57a 45%);
 }
 
-/* 성냥통과 긋는 면 */
 #box {
   left: 60%;
   top: 75%;
@@ -470,7 +452,6 @@ body {
   background: #3a3a3d;
 }
 
-/* 지나간 자리가 살짝 하얘져요 */
 .scratch {
   position: absolute;
   left: 0.5cqw;
@@ -487,7 +468,6 @@ body {
   transition: transform 0.25s linear;
 }
 
-/* 불꽃: --amp가 클수록 크게 일렁여요 */
 .flame {
   position: absolute;
   left: -0.8cqw;
@@ -516,7 +496,6 @@ body {
   }
 }
 
-/* 스파크: 별(*) 모양으로 사방에 뻗어요 */
 .spark {
   position: absolute;
   width: 0.2cqw;
