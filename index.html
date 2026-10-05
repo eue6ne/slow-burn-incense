@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Slow Burn Incense</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="stage" id="stage" data-state="idle">
+    <h1 class="title">Slow Burn Incense</h1>
+
+    <div class="panel materials">
+      <p class="label">Choose your incense</p>
+      <div class="row">
+        <button class="choice material selected" data-value="stick">Stick</button>
+        <button class="choice material" data-value="wood">Wood</button>
+        <button class="choice material" data-value="paper">Paper</button>
+      </div>
+    </div>
+
+    <div class="panel ignitions">
+      <p class="label">Light it with</p>
+      <div class="row">
+        <button class="choice ignition selected" data-value="lighter">Lighter</button>
+        <button class="choice ignition" data-value="match">Match</button>
+      </div>
+    </div>
+
+    <div class="item active" id="item-stick">
+      <div class="stick burnable" data-burn="85%" data-ash="10%">
+        <div class="piece piece-char"></div>
+        <div class="piece piece-fresh"></div>
+        <div class="burn-line">
+          <div class="scorch"></div>
+          <div class="ember"></div>
+        </div>
+      </div>
+      <div class="holder"></div>
+    </div>
+
+    <div class="item" id="item-wood">
+      <div class="wood wood-under"></div>
+      <div class="wood wood-top burnable" data-burn="30%" data-ash="30%">
+        <div class="piece piece-char"></div>
+        <div class="piece piece-fresh"></div>
+        <div class="burn-line">
+          <div class="scorch"></div>
+          <div class="ember"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="item" id="item-paper">
+      <div class="paper burnable" data-burn="55%" data-ash="8%">
+        <div class="piece piece-char"></div>
+        <div class="piece piece-fresh"></div>
+        <div class="burn-line">
+          <div class="scorch"></div>
+          <div class="ember"></div>
+        </div>
+      </div>
+      <div class="tongs"></div>
+    </div>
+
+    <div id="box">
+      <div class="box-body"></div>
+      <div class="strip"><div class="scratch"></div></div>
+    </div>
+
+    <div id="tool" data-type="lighter">
+      <div class="lighter"></div>
+      <div class="match-parts">
+        <div class="match-stick"></div>
+        <div class="match-head"></div>
+      </div>
+      <div class="flame"></div>
+    </div>
+
+    <div class="controls">
+      <div class="timer-row">
+        <button class="step" id="minus">−</button>
+        <p id="timer">05:00</p>
+        <button class="step" id="plus">+</button>
+      </div>
+      <button class="action" id="start">Light it</button>
+      <button class="action" id="stop">Stop</button>
+      <button class="action" id="again">Again</button>
+    </div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
